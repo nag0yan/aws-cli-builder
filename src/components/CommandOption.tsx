@@ -29,8 +29,12 @@ export const CommandOption = ({i, k, v, deleteHandler, updateHandler, availableO
         {availableOptions.map((option, index) => (
           <option key={index} value={option.optionKey} title="some description">{option.optionKey}</option>
         ))}
-      </select><input value={newValue} 
-      onChange={(e) => setNewValue(e.target.value)}
+      </select>
+      <input value={newValue} 
+      onChange={(e) => {
+        setNewValue(e.target.value)
+        updateHandler(i, {k: newKey, v: e.target.value})
+      }}
       onBlur={() => updateHandler(i, {k: newKey, v: newValue})}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
