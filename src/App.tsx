@@ -1,21 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CopyBlock, a11yDark } from 'react-code-blocks';
 import './App.css';
 import { describeInstancesOptions } from './assets/cli-docs/describeInstances';
+import { Options } from './cliInterface/cli';
 import { CommandOption } from './components/CommandOption';
 
 export default function App() {
+  const command = 'aws ec2 describe-instances'
   const [commandOptions, setCommandOptions] = useState<CommandOption[]>([
-    { k: '--instance-id', v: 'i-12345678910' },
-    { k: '--query', v: 'Instance[].InsntaceId' },
-    { k: '--output', v: 'json' },
+    ...Options[command].options.map(option => ({ k: option.key, v: '', d: option.description }))
   ])
-  // render on adding option
-  useEffect(() => {
-  }, [commandOptions])
 
   const addOption = () => {
-    setCommandOptions([...commandOptions, { k: '--output', v: 'xx' }])
+    setCommandOptions([...commandOptions, { k: '--output', v: 'xx', d: 'The formatting style for command output.' }])
   }
 
   const deleteOption = (i: number) => {
@@ -38,7 +35,7 @@ ${spread(commandOptions)}`}
     />
     {
       commandOptions.map((option, index) => (
-        <CommandOption key={index} i={index} k={option.k} v={option.v} 
+        <CommandOption key={index} i={index} k={option.k} v={option.v} d={option.d}
         updateHandler={updateOption}
         deleteHandler={deleteOption} 
         availableOptions={describeInstancesOptions}
